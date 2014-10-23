@@ -19,13 +19,13 @@ class Rover
 		if @instruction == "M"
 			case @direction
 			when "N"
-				@x += 1
-			when "S"
-				@x -= 1
-			when "E"
 				@y += 1
-			when "W"
+			when "S"
 				@y -= 1
+			when "E"
+				@x += 1
+			when "W"
+				@x -= 1
 			end
 		end
 	end
@@ -67,48 +67,85 @@ class Plateau
 end
 
 
-def mission
-	######## Get User Input #########
-	puts "Enter the plateau's size separated by a space (ie. 3 3): "
-	plateau_coordinates = gets.chomp
-	plateau_coordinates_arr = plateau_coordinates.split.map { |element| element.to_i }
-	print plateau_coordinates_arr
+class RoverMission
+	attr_accessor :name
+	@@count = 0
+	@@location_info = []
+	@@indexed_rovers = []
 
-	puts "Enter the rover's initial position and heading"
-	initial_state_arr = gets.chomp.split(" ")
-	#isolate direction
-	direction = initial_state_arr.pop
-	#convert elements of array to integer
-	initial_state_integer = initial_state_arr.map { |element| element.to_i }
-	#recombine rover initial coords and direction
-	initial_state_arr = initial_state_integer << direction
-	print initial_state_arr
-
-	puts "Enter a series of instructions for the rover to execute (ie. L, R or M): "
-	instructions = gets.chomp
-	instructions_arr = instructions.upcase.split("").compact
-	print instructions_arr
-
-	#############
-	mars_sea = Plateau.new(5,5) # define grid size
-
-	# create initial rover position and heading
-	curiosity = Rover.new(initial_state_arr[0],initial_state_arr[1],initial_state_arr[2])
-
-
-	number_instructions = instructions_arr.length
-
-	index = 0
-	number_instructions.times do 
-		curiosity.read_instruction(instructions_arr[index])
-		curiosity.move
-		curiosity.turn
-		index += 1
+	def initialize(name)
+		@name = name
+		@@count += 1
 	end
-	puts curiosity
+
+	def self.rover_count
+		@@count
+	end
+
+	def self.mission_control
+		puts "Currently there are #{@@count} active rovers"
+		puts "They are located at: "
+		puts @@location_info
+	end
+
+	def set_plateau(x,y)
+		plateau = Plateau.new(x,y)
+	end
+
+	def place_rover(x,y,direction)
+		@initial_state_arr = [x,y,direction]
+		print @initial_state_arr
+		@rover = Rover.new(@initial_state_arr[0],@initial_state_arr[1],@initial_state_arr[2])
+		@@indexed_rovers << @name
+		@@location_info << "#{@name}: (#{@rover.x}, #{@rover.y}) facing #{@rover.direction}"
+	end
+
+	def instruct_rover
+		puts "Enter a series of instructions for #{@name} to execute (ie. L, R or M): "
+		@instructions = gets.chomp
+		@instructions_arr = @instructions.upcase.split("").compact
+		print @instructions_arr
+		@number_instructions = @instructions_arr.length
+	end
+
+	def execute_instructions
+		index = 0
+		@number_instructions.times do 
+			@rover.read_instruction(@instructions_arr[index])
+			@rover.move
+			@rover.turn
+			index += 1
+		end
+		puts @rover
+		@@location_info[@@indexed_rovers.find_index(@name)] = "#{@name}: (#{@rover.x}, #{@rover.y}) facing #{@rover.direction}"
+	end
 end
 
-mission
+
+
+
+#Create new mission
+discovery = RoverMission.new("Discovery")
+puts discovery.name
+discovery.set_plateau(2,3)
+discovery.place_rover(2,2,"N")
+#Create new mission
+curiosity = RoverMission.new("Curiosity")
+puts curiosity.name
+curiosity.set_plateau(2,3)
+curiosity.place_rover(1,1,"E")
+#Check status of the missions
+puts RoverMission.rover_count
+puts RoverMission.mission_control
+#Move the Curiosity rover
+curiosity.instruct_rover
+curiosity.execute_instructions
+#Move the discovery rover
+discovery.instruct_rover
+discovery.execute_instructions
+#Check status of the missions
+puts RoverMission.mission_control
+
 
 
 
