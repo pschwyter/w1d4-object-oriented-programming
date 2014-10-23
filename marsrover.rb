@@ -70,10 +70,10 @@ end
 
 def rover_mission
 
-	# puts "Enter the plateau's coordinates separated by spaces (ie. 3 3): "
-	# plateau_coordinates = gets.chomp
-	# plateau_coordinates_arr = plateau_coordinates.split.map { |element| element.to_i }
-	# print plateau_coordinates_arr
+	puts "Enter the plateau's size separated by a space (ie. 3 3): "
+	plateau_coordinates = gets.chomp
+	plateau_coordinates_arr = plateau_coordinates.split.map { |element| element.to_i }
+	print plateau_coordinates_arr
 
 	# puts "Enter the rover's initial position and heading"
 	# rover_initial_state = gets.chomp
