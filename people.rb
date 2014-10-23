@@ -25,3 +25,7 @@ end
 #Step 6, create instructor named Chris and call greet
 chris = Instructor.new("Chris")
 chris.greet
+
+#Step 7, create student named Cristina and call greet
+cristina = Student.new("Cristina")
+cristina.greet
