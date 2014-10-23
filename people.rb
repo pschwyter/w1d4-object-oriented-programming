@@ -29,3 +29,9 @@ chris.greet
 #Step 7, create student named Cristina and call greet
 cristina = Student.new("Cristina")
 cristina.greet
+
+#Step 8, call learn, teach
+chris.teach
+cristina.learn
+cristina.teach # calling "teach" on an instance of class Student results in: people.rb:36:in `<main>': undefined method `teach' for #<Student:0x007fcb53093848 @name="Cristina"> (NoMethodError)
+			   # This is because the "teach" method is only defined in the Instructor class and the Student class only inherits from the Person class
