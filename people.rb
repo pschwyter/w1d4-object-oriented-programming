@@ -16,5 +16,9 @@ class Person
 	def initialize(name)
 		@name = name
 	end
+
+	def greet
+		puts "Hi, my name is #{@name}"
+	end
 end
 
